@@ -59,4 +59,16 @@ class QuestionData {
   String getQstText(int nbr) {
     return _questionBank[nbr].questiontext;
   }
+
+  List<String> getShuffledAnswers(int nbr) {
+    return _questionBank[nbr].getShuffledList();
+  }
+
+  List<String> getAnswers(int nbr) {
+    return _questionBank[nbr].answers;
+  }
+
+  int get lenght {
+    return _questionBank.length;
+  }
 }

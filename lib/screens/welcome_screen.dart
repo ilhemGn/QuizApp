@@ -16,6 +16,7 @@ class WelcomeScreen extends StatelessWidget {
           const SizedBox(height: 20),
           RoundedButton(
             textbutton: 'Let\'s Start',
+            icon: Icons.arrow_forward_ios,
             pressFct: () {
               Navigator.push(
                 context,

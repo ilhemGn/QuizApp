@@ -1,17 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_app/constants.dart';
+import 'package:quiz_app/data/question_data.dart';
+import 'package:quiz_app/screens/result_screen.dart';
 import 'package:quiz_app/widgets/answer_button.dart';
+import 'package:quiz_app/widgets/question_index.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  QuestionData questionData = QuestionData();
+  int currentIndexQuestion = 0;
+  List<String> answersU = [];
+
+  List<QuestionIndex> questionsIndex() {
+    List<QuestionIndex> qstIndex = [];
+    for (var i = 1; i <= questionData.lenght; i++) {
+      setState(() {});
+      qstIndex.add(QuestionIndex(
+        index: '$i',
+        isCorrect: currentIndexQuestion + 1 >= i,
+      ));
+    }
+    return qstIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 40, 45, 85),
+      backgroundColor: kMainColor,
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: const Color.fromARGB(255, 40, 45, 85),
+        backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -33,17 +57,15 @@ class HomeScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
-          //crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
             Opacity(
-              opacity: 0.8,
+              opacity: 0.65,
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
                 child: Image.asset(
                   'assets/images/DidYouKnow.png',
-                  width: 200,
-                  //height: 200,
+                  width: 250,
                 ),
               ),
             ),
@@ -60,99 +82,41 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            const QuestionNumber(),
-            const SizedBox(height: 30),
-            const Text(
-              'Question text....',
-              //textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w400),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: questionsIndex(),
             ),
-            const SizedBox(height: 15),
-            AnswerButton(
-              answerText: 'answer1....',
-              onTap: () {},
-            ),
-            AnswerButton(
-              answerText: 'answer1....',
-              onTap: () {},
-            ),
-            AnswerButton(
-              answerText: 'answer1....',
-              onTap: () {},
-            ),
-            AnswerButton(
-              answerText: 'answer1....',
-              onTap: () {},
+            const SizedBox(height: 25),
+            Text(
+              questionData.getQstText(currentIndexQuestion),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
             ),
             const SizedBox(height: 20),
+            ...questionData
+                .getShuffledAnswers(currentIndexQuestion)
+                .map((answer) => AnswerButton(
+                      answerText: answer,
+                      onTap: () {
+                        setState(() {
+                          answersU.add(answer);
+                          answersU.length != questionData.lenght
+                              ? currentIndexQuestion++
+                              : Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ResultScreen(answers: answersU)));
+                        });
+                      },
+                    )),
           ],
         ),
       ),
-    );
-  }
-}
-
-class QuestionNumber extends StatelessWidget {
-  const QuestionNumber({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          decoration:
-              BoxDecoration(gradient: kGradient, shape: BoxShape.circle),
-          child: const CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: Text(
-              '1',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500),
-            ),
-          ),
-        ),
-        const SizedBox(width: 15),
-        Container(
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color.fromARGB(36, 242, 239, 239),
-          ),
-          child: const CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: Text(
-              '2',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500),
-            ),
-          ),
-        ),
-        const SizedBox(width: 15),
-        Container(
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color.fromARGB(36, 242, 239, 239),
-          ),
-          child: const CircleAvatar(
-            backgroundColor: Color.fromRGBO(0, 0, 0, 0),
-            child: Text(
-              '3',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

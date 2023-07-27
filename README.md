@@ -1,6 +1,15 @@
-# quiz_app
+## Quiz_app
 
-A new Flutter project.
+Quiz App is an engaging and interactive quiz app built with Flutter that allows you to put your knowledge to the test!
+
+### Local Storage: 
+All the questions are conveniently saved locally within the app, ensuring seamless and quick access to the quiz without requiring an internet connection.
+### Interactive Quiz Experience: 
+Enjoy an immersive quiz experience with thought-provoking questions presented in a user-friendly format.
+### Instant Feedback: 
+After completing the quiz, receive immediate feedback on your performance as Quiz App compares your answers with the correct ones.
+### Score Tracking: 
+Keep track of your progress as Quiz App calculates your score based on the number of correct answers, giving you valuable insights into your knowledge level.
 
 ## Getting Started
 
